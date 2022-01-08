@@ -1,0 +1,47 @@
+#!/usr/bin/env ruby
+
+require 'optparse'
+
+require 'bundler/setup'
+require 'artii_improved'
+
+artii = ArtiiImproved::Base.new font: 'standard'
+
+message = """
+#{ artii.asciify('artii-i') }
+by Ziyan Junaideen
+
+It was 25 years ago when I first got my hands on a computer. It ran DOS on an
+Intel 8086 processor. Among the many things a computer could do, ASCII art
+captivated me.
+
+I have been a frequent user of the original `artii` gem by Michael Tierney,
+which sadly went without updates for years. For starters, I would like to
+complete some of his ToDo features. Then I intend to add some customization for
+my very own usage.
+
+I hope you found this Ruby-gem useful.
+
+Ziyan Junaideen
+ziyan@jdeen.com
+"""
+
+options = {}
+OptionParser.new do |opts|
+  opts.banner = "Usage: ./exe/artii-i [options]"
+
+  opts.on('-v', '--version', 'Gem version') { options[:version] = true }
+  opts.on('-i', '--info', 'Gem info') { options[:info] = true }
+
+  opts.on('--words [INTEGER]', 'Number of wrods to be used in the generated password') { |words| options[:words] = words.to_i }
+  opts.on('--min-length [INTEGER]', 'Minimum length of a word') { |min| options[:min_length] = min.to_i }
+  opts.on('--max-length [INTEGER]', 'Maximum length of a word') { |max| options[:max_length] = max.to_i }
+  opts.on('--separator [STRING]', 'The separator to separate password') { |separator| options[:separator] = separator }
+end.parse!
+
+puts message if options[:info]
+puts ArtiiImproved::VERSION if options[:version]
+puts ArtiiImproved.generate(options) if !options[:info] && !options[:version]
+
+
+
